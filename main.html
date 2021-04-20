@@ -1,0 +1,38 @@
+﻿<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SciterView</title>
+    <style>
+        plaintext {
+            padding: 1em 0;
+            margin : 0;
+            tab-size: 2;
+        }
+    </style>
+    <script type="text/tiscript">
+        const HTML = $(#HTML), CSS = $(#CSS), SCRIPT = $(#SCRIPT), Frame = $(frame);
+        for (var p in $$(plaintext))
+            p.loadDocument(p.@#src);
+        
+        event change $(plaintext) {
+            this.saveDocument(this.@#src);
+            Frame.load(Frame.@#src);
+        }
+    </script>
+</head>
+
+<body>
+    <frameset rows="*">
+        <frameset cols="*">
+            <plaintext linenumbers #HTML src="content/html.html"></plaintext>
+            <plaintext linenumbers #CSS  src="content/css.css"></plaintext>
+        </frameset>
+        <frameset cols="*">
+            <plaintext linenumbers #SCRIPT src="content/script.script"></plaintext>
+            <frame src="content/html.html"></frame>
+        </frameset>
+    </frameset>
+</body>
+
+</html>

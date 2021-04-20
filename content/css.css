@@ -1,0 +1,10 @@
+h1 {
+	padding: 1em;
+	margin: * auto;
+
+	text-align: center;
+	color: #fff;
+
+	background: #00aaff;
+	behavior: richtext;
+}
