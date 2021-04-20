@@ -2,16 +2,18 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SciterView</title>
+    <title>SciterView 0.2</title>
     <style>
         plaintext {
             padding: 1em 0;
             margin : 0;
             tab-size: 2;
+            background: #fff;
         }
     </style>
     <script type="text/tiscript">
         const HTML = $(#HTML), CSS = $(#CSS), SCRIPT = $(#SCRIPT), Frame = $(frame);
+
         for (var p in $$(plaintext))
             p.loadDocument(p.@#src);
         
@@ -19,6 +21,46 @@
             this.saveDocument(this.@#src);
             Frame.load(Frame.@#src);
         }
+    </script>
+    <script type="module"> // SIGH...
+        import {$ , $$, encode, decode} from '@sciter';
+        import * as sys from '@sys';
+        const HTML  = $('#HTML'), CSS = $('#CSS'), SCRIPT = $('#SCRIPT'), Frame = $('frame');
+        var baseURL = sys.fs.splitpath(document.url())[0] + "/";
+        
+        async function Stream(path, content = false) {
+            let file = await sys.fs.open(path, !content ? 'r' : 'w+',0o666);
+            !content ? content = decode(await file.read(), "utf-8") : await file.write(encode(content, 'utf-8'));
+            await file.close();
+            return content;
+        }
+        async function loadDocs() {
+            for (var p of $$('plaintext'))
+                p.value = await Stream(p.src.replace("file://", ""));
+        }
+        loadDocs();
+
+        document.on('change', "plaintext", 
+            debounce(async (evt, p) => {
+                await Stream(p.src.replace("file://", ""), p.value);
+                Frame.frame.loadFile(Frame.src);
+            }, 1000)
+        );
+
+        function debounce(func, wait, immediate) {
+            var timeout;
+            return function() {
+                var context = this, args = arguments;
+                var later = function() {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+                var callNow = immediate && !timeout;
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+                if (callNow) func.apply(context, args);
+            };
+        };
     </script>
 </head>
 

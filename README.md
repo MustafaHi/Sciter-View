@@ -1,7 +1,7 @@
 # Sciter View
 test area (app) for Sciter.JS/Tis code
 
-> Version: 0.1
+> Version: 0.2
 
 ### HOW TO USE
 
