@@ -2,52 +2,55 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SciterView 0.2</title>
+    <title>SciterView 0.3</title>
     <style>
         plaintext {
             padding: 1em 0;
             margin : 0;
             tab-size: 2;
             background: #fff;
+            font-family: 'SF Mono', 'Consolas';
+            font-rendering-mode: enhanced;
+            font-size: 14dip;
         }
     </style>
     <script type="text/tiscript">
         const HTML = $(#HTML), CSS = $(#CSS), SCRIPT = $(#SCRIPT), Frame = $(frame);
 
-        for (var p in $$(plaintext))
-            p.loadDocument(p.@#src);
-        
-        event change $(plaintext) {
-            this.saveDocument(this.@#src);
-            Frame.load(Frame.@#src);
+        function Render() {
+            Frame.frame.loadHtml(
+                String.$(&lt;html>&lt;style>{CSS.value}&lt;/style>&lt;body>{HTML.value}&lt;/body>&lt;script type='text/tiscript'>{SCRIPT.value}&lt;/script>&lt;/html>).htmlUnescape(),
+                self.url()
+            );
+        } Render();
+
+        self.on( 'change', 'plaintext', ()=>{debounce(Render, 1000)()} );
+
+        function debounce(func, wait, immediate = false) {
+            return function(arguments..) {
+                var context = this, args = arguments;
+                var later = function() {
+                    if (!immediate) func.apply(context, args);
+                };
+                self.timer(wait, later);
+                if (immediate) func.apply(context, args);
+            };
         }
     </script>
-    <script type="module"> // SIGH...
-        import {$ , $$, encode, decode} from '@sciter';
-        import * as sys from '@sys';
+    <script type="module">
+        import {$} from '@sciter';
         const HTML  = $('#HTML'), CSS = $('#CSS'), SCRIPT = $('#SCRIPT'), Frame = $('frame');
-        var baseURL = sys.fs.splitpath(document.url())[0] + "/";
+
+        function Render() {
+            Frame.frame.loadHtml(
+                unescape(`%3Chtml>%3Cstyle>${CSS.value}%3C/style>%3Cbody>${HTML.value}%3C/body>%3Cscript type='module'>${SCRIPT.value}%3C/script>%3C/html>`),
+                document.url()
+            );
+        } Render();
         
-        async function Stream(path, content = false) {
-            let file = await sys.fs.open(path, !content ? 'r' : 'w+',0o666);
-            !content ? content = decode(await file.read(), "utf-8") : await file.write(encode(content, 'utf-8'));
-            await file.close();
-            return content;
-        }
-        async function loadDocs() {
-            for (var p of $$('plaintext'))
-                p.value = await Stream(p.src.replace("file://", ""));
-        }
-        loadDocs();
+        document.on( 'change', 'plaintext', debounce(Render, 1000) );
 
-        document.on('change', "plaintext", 
-            debounce(async (evt, p) => {
-                await Stream(p.src.replace("file://", ""), p.value);
-                Frame.frame.loadFile(Frame.src);
-            }, 1000)
-        );
-
-        function debounce(func, wait, immediate) {
+        function debounce(func, wait, immediate = false) {
             var timeout;
             return function() {
                 var context = this, args = arguments;
@@ -55,10 +58,9 @@
                     timeout = null;
                     if (!immediate) func.apply(context, args);
                 };
-                var callNow = immediate && !timeout;
                 clearTimeout(timeout);
                 timeout = setTimeout(later, wait);
-                if (callNow) func.apply(context, args);
+                if (immediate) func.apply(context, args);
             };
         };
     </script>
@@ -67,12 +69,31 @@
 <body>
     <frameset rows="*">
         <frameset cols="*">
-            <plaintext linenumbers #HTML src="content/html.html"></plaintext>
-            <plaintext linenumbers #CSS  src="content/css.css"></plaintext>
+<plaintext linenumbers #HTML>
+
+<h1>Welcome to SciterView</h1>
+
+</plaintext>
+<plaintext linenumbers #CSS>
+h1 {
+    padding: 1em;
+    margin: * auto;
+
+    text-align: center;
+    color: #fff;
+
+    background: #00aaff;
+    behavior: richtext;
+}
+</plaintext>
         </frameset>
         <frameset cols="*">
-            <plaintext linenumbers #SCRIPT src="content/script.script"></plaintext>
-            <frame src="content/html.html"></frame>
+<plaintext linenumbers #SCRIPT>
+event click $(body) {
+    this.style#background = String.$(rgb({rand(255)}, {rand(255)}, {rand(255)}));
+}
+</plaintext>
+            <frame></frame>
         </frameset>
     </frameset>
 </body>
