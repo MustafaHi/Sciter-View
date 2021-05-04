@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SciterView 0.3</title>
+    <title>SciterView 0.4</title>
     <style>
         plaintext {
             padding: 1em 0;
@@ -12,58 +12,11 @@
             font-family: 'SF Mono', 'Consolas';
             font-rendering-mode: enhanced;
             font-size: 14dip;
+            prototype: Editor;
         }
     </style>
-    <script type="text/tiscript">
-        const HTML = $(#HTML), CSS = $(#CSS), SCRIPT = $(#SCRIPT), Frame = $(frame);
-
-        function Render() {
-            Frame.frame.loadHtml(
-                String.$(&lt;html>&lt;style>{CSS.value}&lt;/style>&lt;body>{HTML.value}&lt;/body>&lt;script type='text/tiscript'>{SCRIPT.value}&lt;/script>&lt;/html>).htmlUnescape(),
-                self.url()
-            );
-        } Render();
-
-        self.on( 'change', 'plaintext', ()=>{debounce(Render, 1000)()} );
-
-        function debounce(func, wait, immediate = false) {
-            return function(arguments..) {
-                var context = this, args = arguments;
-                var later = function() {
-                    if (!immediate) func.apply(context, args);
-                };
-                self.timer(wait, later);
-                if (immediate) func.apply(context, args);
-            };
-        }
-    </script>
-    <script type="module">
-        import {$} from '@sciter';
-        const HTML  = $('#HTML'), CSS = $('#CSS'), SCRIPT = $('#SCRIPT'), Frame = $('frame');
-
-        function Render() {
-            Frame.frame.loadHtml(
-                unescape(`%3Chtml>%3Cstyle>${CSS.value}%3C/style>%3Cbody>${HTML.value}%3C/body>%3Cscript type='module'>${SCRIPT.value}%3C/script>%3C/html>`),
-                document.url()
-            );
-        } Render();
-        
-        document.on( 'change', 'plaintext', debounce(Render, 1000) );
-
-        function debounce(func, wait, immediate = false) {
-            var timeout;
-            return function() {
-                var context = this, args = arguments;
-                var later = function() {
-                    timeout = null;
-                    if (!immediate) func.apply(context, args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-                if (immediate) func.apply(context, args);
-            };
-        };
-    </script>
+    <script type="text/tiscript" src="src/main.tis"></script>
+    <script src="src/main.js"></script>
 </head>
 
 <body>
@@ -76,21 +29,22 @@
 </plaintext>
 <plaintext linenumbers #CSS>
 h1 {
-    padding: 1em;
-    margin: * auto;
+	padding: 1em;
+	margin: * auto;
 
-    text-align: center;
-    color: #fff;
+	text-align: center;
+	color: #fff;
 
-    background: #00aaff;
-    behavior: richtext;
+	background: #00aaff;
+	behavior: richtext;
 }
 </plaintext>
         </frameset>
         <frameset cols="*">
 <plaintext linenumbers #SCRIPT>
 event click $(body) {
-    this.style#background = String.$(rgb({rand(255)}, {rand(255)}, {rand(255)}));
+	this.style#background
+	= String.$(rgb({rand(255)}, {rand(255)}, {rand(255)}));
 }
 </plaintext>
             <frame></frame>

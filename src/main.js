@@ -72,14 +72,16 @@ class Editor extends Element {
 
         var S = Start[0] < End[0] ? Start : End,
             E = Start[0] > End[0] ? Start : End;
-
+            
         this.plaintext.update((transact) => {
             for(var i =  S[0]; i <= E[0]; ++i) {
                 var t =  this.children[i];
                 if (add) transact.setText(t, '\t' + t.textContent);
                 else     transact.setText(t, t.textContent.replace(/^\t/, ""));
             }
-            this.plaintext.selectRange(S[0], S[1], E[0], add ? E[1]+1 : E[1]-1);
+            S = Start, E = End;
+            this.selection.setBaseAndExtent(this.children[S[0]].firstChild, add ? ++S[1] : --S[1],
+                                            this.children[E[0]].firstChild, add ? ++E[1] : --E[1]);
             return true;
         });
         return true;

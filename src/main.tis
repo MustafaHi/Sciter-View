@@ -90,6 +90,7 @@ class Editor : Element {
                 if (add) transact.text(t, '\t' + t.text);
                 else     transact.text(t, t.text.replace(/^\t/, ""));
             }
+            S = Start, E = End;
             this.selection.select([bookmark: this[S[0]].nodes()[0], add ? S[1] : S[1] - 2, true],
                                   [bookmark: this[E[0]].nodes()[0], add ? E[1] : E[1] - 2, true]);
             return true;
