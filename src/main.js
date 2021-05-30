@@ -1,17 +1,8 @@
-//| Sciter View v0.4
+//| Sciter View v0.5
 //| https://github.com/MustafaHi/Sciter-View
 
-const HTML  = document.$('#HTML'), CSS    = document.$('#CSS'), 
-      Frame = document.$('frame'), SCRIPT = document.$('#SCRIPT');
-
-function Render() {
-    Frame.frame.loadHtml(
-        `<html><body>${HTML.value}</body><style>${CSS.value}</style><script type='module'>${SCRIPT.value}</script></html>`,
-        document.url()
-    );
-} Render();
-
-document.on( 'change', 'plaintext', debounce(Render, 1000) );
+const HTML = document.$('#HTML'), CSS = document.$('#CSS'), SCRIPT = document.$('#SCRIPT'), 
+      VIEW = document.$('#VIEW'), INSPECTOR = document.$('#INSPECTOR');
 
 function debounce(func, wait, immediate = false) {
     var timeout;
@@ -27,8 +18,25 @@ function debounce(func, wait, immediate = false) {
     };
 }
 
+function Render() {
+    VIEW.frame.loadHtml(
+        `<html><body>${HTML.value}</body><style>${CSS.value}</style><script type='module'>${SCRIPT.value}</script></html>`,
+        document.url()
+    );
+}
+const postRender = debounce(Render, 1000);
+
+document.ready = function() {
+    INSPECTOR.frame.loadFile("src/inspector/js/inspector.htm");
+    Render();
+}
+
+INSPECTOR.on("complete", () => Window.this.connectToInspector(VIEW));
+document.$("#toggleInspector").on("change", (evt, This) => document.setAttribute("inspector", This.value));
+
 class Editor extends Element {
 
+    ["on change"]() { postRender(); }
     ["on ^keypress"](evt) {
         if (evt.shiftKey) for(var key of this.WrapKeys)
         if (evt.key == key.code) return this.Wrap(key.v);
@@ -54,15 +62,13 @@ class Editor extends Element {
     ];
 
     Wrap(v) {
-        var Start = this.plaintext.selectionStart,
-            End   = this.plaintext.selectionEnd,
-            Text  = this.plaintext.selectionText;
-
-        var S = Start[0] < End[0] ? Start : End,
-            E = Start[0] > End[0] ? Start : End;
+        var S    = this.plaintext.selectionStart,
+            E    = this.plaintext.selectionEnd,
+            Text = this.plaintext.selectionText;
 
         this.execCommand("edit:insert-text", v[0] + Text + v[1]);
-        this.plaintext.selectRange(S[0], S[1], E[0], S[0] == E[0] ? E[1]+1 : E[1]);
+        this.selection.setBaseAndExtent(this.children[S[0]].firstChild, ++S[1],
+                                        this.children[E[0]].firstChild, E[0] == S[0] ? ++E[1] : E[1]);
         return true;
     }
 

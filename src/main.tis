@@ -1,17 +1,8 @@
-//| Sciter View v0.4
+//| Sciter View v0.5
 //| https://github.com/MustafaHi/Sciter-View
 
-const HTML  = $(#HTML), CSS    = $(#CSS),
-      Frame = $(frame), SCRIPT = $(#SCRIPT);
-
-function Render() {
-    Frame.frame.loadHtml(
-        String.$(<html><body>{HTML.value}</body><style>{CSS.value}</style><script type='text/tiscript'>{SCRIPT.value}</script></html>),
-        self.url()
-    );
-} Render();
-
-self.on( 'change', 'plaintext', ()=>{debounce(Render, 1000)()} );
+const HTML = $(#HTML), CSS = $(#CSS), SCRIPT = $(#SCRIPT),
+      VIEW = $(#VIEW), INSPECTOR = $(#INSPECTOR);
 
 function debounce(func, wait, immediate = false) {
     return function(arguments..) {
@@ -24,8 +15,25 @@ function debounce(func, wait, immediate = false) {
     };
 }
 
+function Render() {
+    VIEW.frame.loadHtml(
+        String.$(<html><body>{HTML.value}</body><style>{CSS.value}</style><script type='text/tiscript'>{SCRIPT.value}</script></html>),
+        self.url()
+    );
+}
+const postRender = debounce(Render, 1000);
+
+self.ready = function() {
+    INSPECTOR.frame.loadFile("src/inspector/tis/facade.htm");
+    Render();
+}
+
+event complete $(#INSPECTOR) { view.connectToInspector(VIEW); }
+self.$(#toggleInspector).on("change", :: self.@#inspector = this.value);
+
 class Editor : Element {
 
+    event change { postRender(); }
     event ~keypress(evt) {
         if (evt.shiftKey) for(var key of this.WrapKeys) 
         if (evt.keyCode == key.code) return this.Wrap(key.v);
@@ -53,28 +61,14 @@ class Editor : Element {
     ];
 
     function Wrap(v) {
-        var Start = this.plaintext.selectionStart,
-            End   = this.plaintext.selectionEnd,
-            Text  = this.plaintext.selectionText;
-            // caret = this.selection.start,
-            // anchor= this.selection.end;
-
-        var S = Start[1] < End[1] ? Start : End,
-            E = Start[1] > End[1] ? Start : End;
+        var S    = this.plaintext.selectionStart,
+            E    = this.plaintext.selectionEnd,
+            Text = this.plaintext.selectionText;
 
         this.execCommand("edit:insert-text", v[0] + Text + v[1]);
-        this.plaintext.selectRange(S[0], S[1], E[0], S[0] == E[0] ? E[1]+1 : E[1]);
-        
+        this.selection.select([bookmark: this[S[0]].nodes()[0], S[1], true],
+                              [bookmark: this[E[0]].nodes()[0], E[1], E[0] == S[0]]);
         return true;
-        // function doit(transact) {
-        //     var t = this[S[0]];
-        //     transact.text(t, t.text.splice(S[1], 0, v[0]));
-        //     t = this[E[0]];
-        //     if (E[0] == S[0]) E[1]++;
-        //     transact.text(t, t.text.splice(E[1], 0, v[1]));
-        //     this.selection.select(caret, anchor);
-        // }
-        // this.transact(doit, "wrap text");
     }
 
     function Tab(add) {
@@ -113,7 +107,7 @@ class Editor : Element {
         {
             var S    = this.plaintext.selectionStart,
                 tabs = this.plaintext[S[0]-1].match(/^\t|\>$|\{$/g)?.length || 0;
-                       this.execCommand("edit:insert-text", repeat("\t", tabs));
+            if (tabs)  this.execCommand("edit:insert-text", repeat("\t", tabs));
             
             if        (this.plaintext[S[0]].slice(-1) == "}") {
                        this.execCommand("edit:insert-break");

@@ -1,10 +1,15 @@
-﻿<html lang="en">
+﻿<html lang="en" inspector=Code window-frame="standard">
 
 <head>
     <meta charset="UTF-8">
-    <title>SciterView 0.4</title>
+    <title>SciterView 0.5</title>
     <style>
-        plaintext {
+        html[inspector="Inspector"] #HTML,
+        html[inspector="Inspector"] #CSS,
+        html[inspector="Code"] #INSPECTOR {
+            visibility: none;
+        }
+        #HTML, #CSS, #SCRIPT {
             padding: 1em 0;
             margin : 0;
             tab-size: 2;
@@ -14,14 +19,34 @@
             font-size: 14dip;
             prototype: Editor;
         }
+        #HEADER {
+            height: 40dip;
+            vertical-align: middle;
+        }
+        #toggleInspector {
+            flow: horizontal;
+            size: min-content;
+            padding: 0;
+            border-radius: 4dip;
+        }
+        #toggleInspector option {
+            padding: 3dip 5dip;
+        }
     </style>
     <script type="text/tiscript" src="src/main.tis"></script>
     <script src="src/main.js"></script>
 </head>
 
 <body>
-    <frameset rows="*">
-        <frameset cols="*">
+    <header #HEADER>
+        <select|list #toggleInspector>
+            <option accesskey="!F1" selected>Code</option>
+            <option accesskey="!F2">Inspector</option>
+        </select>
+    </header>
+    <frameset cols="*">
+        <frameset rows="*">
+            <frame #INSPECTOR></frame>
 <plaintext linenumbers #HTML>
 
 <h1>Welcome to SciterView</h1>
@@ -40,14 +65,14 @@ h1 {
 }
 </plaintext>
         </frameset>
-        <frameset cols="*">
+        <frameset rows="*">
 <plaintext linenumbers #SCRIPT>
 event click $(body) {
 	this.style#background
 	= String.$(rgb({rand(255)}, {rand(255)}, {rand(255)}));
 }
 </plaintext>
-            <frame></frame>
+            <frame #VIEW></frame>
         </frameset>
     </frameset>
 </body>

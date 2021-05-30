@@ -2,7 +2,7 @@
 
 test area (app) for Sciter.JS/TIS code
 
-> Version: 0.4
+> Version: 0.5
 
 ### HOW TO USE
 
@@ -19,5 +19,6 @@ test area (app) for Sciter.JS/TIS code
 | <kbd>SHIFT</kbd> <kbd>\{ \( \<</kbd> | Wrap selection |
 | <kbd>CTRL</kbd> <kbd>\[ \]</kbd> | Indent selection |
 | <kbd>CTRL[SHIFT]</kbd> <kbd>Enter</kbd> | Insert line below or [SHIFT]above |
-| <kbd>F5</kbd> | Reload App |
+| <kbd>F2</kbd> | Inspector |
+| <kbd>F1</kbd> | Code |
 
