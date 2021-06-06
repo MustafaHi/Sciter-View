@@ -1,4 +1,4 @@
-//| Sciter View v0.5
+//| Sciter View v0.6
 //| https://github.com/MustafaHi/Sciter-View
 
 const HTML = $(#HTML), CSS = $(#CSS), SCRIPT = $(#SCRIPT),
@@ -17,7 +17,7 @@ function debounce(func, wait, immediate = false) {
 
 function Render() {
     VIEW.frame.loadHtml(
-        String.$(<html><body>{HTML.value}</body><style>{CSS.value}</style><script type='text/tiscript'>{SCRIPT.value}</script></html>),
+        String.$(<html>{'\n'}<body>{'\n'+ HTML.value +'\n'}</body>{'\n\n'}<style>{'\n'+ CSS.value +'\n'}</style>{'\n\n'}<script type='text/tiscript'>{'\n'+ SCRIPT.value +'\n'}</script>{'\n'}</html>),
         self.url()
     );
 }
@@ -31,9 +31,24 @@ self.ready = function() {
 event complete $(#INSPECTOR) { view.connectToInspector(VIEW); }
 self.$(#toggleInspector).on("change", :: self.@#inspector = this.value);
 
+self.$(#RUN).on("click", Render);
+
+self.$(#LOAD).on("click", () => {
+    var fn = view.selectFile(#open, "HTML File (*.htm,*.html)|*.html;*.htm|All Files (*.*)|*.*");
+    if (fn)  VIEW.frame.loadFile(fn);
+
+    HTML  .value = VIEW.frame.document[0].html.trim();
+    CSS   .value = VIEW.frame.document[1].html.trim();
+    SCRIPT.value = VIEW.frame.document[2].html.trim();
+});
+self.$(#SAVE).on("click", () => {
+    var fn = view.selectFile(#save, "HTML File (*.htm,*.html)|*.html;*.htm|All Files (*.*)|*.*");
+    if (fn)  VIEW.frame.saveFile(fn);
+});
+
 class Editor : Element {
 
-    event change { postRender(); }
+    event change { $(#LIVE).value && postRender(); }
     event ~keypress(evt) {
         if (evt.shiftKey) for(var key of this.WrapKeys) 
         if (evt.keyCode == key.code) return this.Wrap(key.v);
@@ -100,17 +115,17 @@ class Editor : Element {
             return string;
         }
 
-        //| check if current line has tabs and/or end with > or {
+        //| check if current line has tabs and/or end with {
         //| indent the new line accordingly
 
         if (at == "keep") //| (enter)
         {
             var S    = this.plaintext.selectionStart,
-                tabs = this.plaintext[S[0]-1].match(/^\t|\>$|\{$/g)?.length || 0;
+                tabs = this.plaintext[S[0]-1].match(/^\t|\{$/g)?.length || 0;
             if (tabs)  this.execCommand("edit:insert-text", repeat("\t", tabs));
             
             if        (this.plaintext[S[0]].slice(-1) == "}") {
-                       this.execCommand("edit:insert-break");
+                       this.execCommand("edit:insert-text", "\r\n" + repeat("\t", tabs - 1));
                        this.plaintext.selectRange(0, 0, S[0], 999);
             }
         }
@@ -125,7 +140,7 @@ class Editor : Element {
         else if (at == "bottom") //| (ctrl+enter)
         {
             var S    = this.plaintext.selectionStart,
-                tabs = this.plaintext[S[0]].match(/^\t|\>$|\{$/g)?.length || 0;
+                tabs = this.plaintext[S[0]].match(/^\t|\{$/g)?.length || 0;
                        this.execCommand("navigate:line-end");
                        this.execCommand("edit:insert-text", "\r\n" + repeat("\t", tabs));
         }

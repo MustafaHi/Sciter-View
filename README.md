@@ -1,24 +1,27 @@
 # Sciter View
 
-test area (app) for Sciter.JS/TIS code
+test area (app) for [Sciter.JS](https://github.com/c-smile/sciter-js-sdk)/[TIS](https://github.com/c-smile/sciter-sdk) code
 
-> Version: 0.5
+> Version: 0.6
 
 ### HOW TO USE
 
 - Clone this repo
-- Add `scapp` from Sciter-sdk
+- Init `install.sh` or add `scapp` from Sciter-sdk
 - Run it ✌
 
-![screenshot](https://user-images.githubusercontent.com/5108884/115338925-7b4ca700-a1ac-11eb-8ae3-ad4b8ffa4e6a.png)
+![Sciter View screenshot](https://user-images.githubusercontent.com/5108884/120910403-66a66e80-c687-11eb-9046-311ade74e0a4.png)
 
 ### Shortcuts
 
-| Key | Do |
+| Key | Do  |
 | --- | --- |
 | <kbd>SHIFT</kbd> <kbd>\{ \( \<</kbd> | Wrap selection |
 | <kbd>CTRL</kbd> <kbd>\[ \]</kbd> | Indent selection |
 | <kbd>CTRL[SHIFT]</kbd> <kbd>Enter</kbd> | Insert line below or [SHIFT]above |
-| <kbd>F2</kbd> | Inspector |
 | <kbd>F1</kbd> | Code |
+| <kbd>F2</kbd> | Inspector |
+| <kbd>F5</kbd> | Run/Reload |
+
+Inspector select, copy and delete with the usual victims.
 

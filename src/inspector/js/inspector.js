@@ -4,7 +4,10 @@ const LOG = document.$('#LOG');
 const CMD = document.$('#CMD');
 
 function log(subsystem, severity, msg) {
-    LOG.append(<option severity={severity}>{msg}</option>); return true;
+    LOG.append(<option severity={severity}>{msg}</option>);
+    if (LOG.scrollTop > (LOG.scrollHeight - LOG.clientHeight - 80))
+        LOG.lastElementChild.scrollIntoView({behavior:"smooth"});
+    return true;
 }
 
 debug.setConsoleOutputHandler((subsystem,severity,msg) => {
@@ -32,7 +35,7 @@ Window.this.connectToInspector = function (ELEMENT) {
       if( !toeval ) return;
       try {
         var r = ELEMENT.frame.document.globalThis.eval(toeval);
-        r == null ? console.warn('NULL') : console.log(r);
+        r == null ? console.warn('null') : console.log(r);
       } catch(e) {
         console.warn(e.message);
       }
@@ -58,4 +61,15 @@ Window.this.connectToInspector = function (ELEMENT) {
         if( evt.ctrlKey && evt.shiftKey )
             return true;
     });
+}
+
+LOG.onkeydown = function(evt) {
+    if (evt.code == "KeyDELETE")
+        for (var s of evt.target.$$(":checked")) s.remove();
+
+    if (evt.code == "KeyC" && evt.ctrlKey)
+        Clipboard.writeText(evt.target.value.join('\r\n'));
+
+    if (evt.code == "KeyA" && evt.ctrlKey)
+        for (var s of evt.target.children) s.state.checked = true;
 }

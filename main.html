@@ -1,27 +1,22 @@
-﻿<html lang="en" inspector=Code window-frame="standard">
+﻿<html lang=en inspector=Code window-frame=standard>
 
 <head>
     <meta charset="UTF-8">
-    <title>SciterView 0.5</title>
+    <title>SciterView 0.6</title>
     <style>
+        @import url(src/colorizer/source-code.css);
         html[inspector="Inspector"] #HTML,
         html[inspector="Inspector"] #CSS,
         html[inspector="Code"] #INSPECTOR {
             visibility: none;
         }
         #HTML, #CSS, #SCRIPT {
-            padding: 1em 0;
-            margin : 0;
-            tab-size: 2;
-            background: #fff;
-            font-family: 'SF Mono', 'Consolas';
-            font-rendering-mode: enhanced;
-            font-size: 14dip;
-            prototype: Editor;
+            style-set: source-code;
         }
         #HEADER {
             height: 40dip;
-            vertical-align: middle;
+            flow: horizontal;
+            border-spacing: *;
         }
         #toggleInspector {
             flow: horizontal;
@@ -32,9 +27,13 @@
         #toggleInspector option {
             padding: 3dip 5dip;
         }
+        button|check   { behavior: check;}
+        button:checked { background: aliceblue;}
     </style>
     <script type="text/tiscript" src="src/main.tis"></script>
     <script src="src/main.js"></script>
+    <script type="text/tiscript" src="src/colorizer/colorizer.tis"></script>
+    <script src="src/colorizer/colorizer.js"></script>
 </head>
 
 <body>
@@ -43,16 +42,24 @@
             <option accesskey="!F1" selected>Code</option>
             <option accesskey="!F2">Inspector</option>
         </select>
+        <div>
+            <button accesskey="!F5" #RUN>RUN</button>
+            <button|check checked  #LIVE>Auto Run</button>
+        </div>
+        <div>
+            <button accesskey="^O" #LOAD>LOAD</button>
+            <button accesskey="^S" #SAVE>SAVE</button>
+        </div>
     </header>
     <frameset cols="*">
         <frameset rows="*">
             <frame #INSPECTOR></frame>
-<plaintext linenumbers #HTML>
+<plaintext #HTML type="text/html">
 
 <h1>Welcome to SciterView</h1>
 
 </plaintext>
-<plaintext linenumbers #CSS>
+<plaintext #CSS type="text/css">
 h1 {
 	padding: 1em;
 	margin: * auto;
@@ -66,7 +73,7 @@ h1 {
 </plaintext>
         </frameset>
         <frameset rows="*">
-<plaintext linenumbers #SCRIPT>
+<plaintext #SCRIPT type="text/script">
 event click $(body) {
 	this.style#background
 	= String.$(rgb({rand(255)}, {rand(255)}, {rand(255)}));
