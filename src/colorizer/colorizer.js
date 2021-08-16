@@ -136,7 +136,6 @@ function colorize()
         {
           nmtokenStart = tz.tokenRange.start;
           var val = tz.tokenValue;
-          console.warn(val);
           if( val[0] == '#' )
             tz.tokenRange.highlight("literal");
           else if(KEYWORDS[val]) 

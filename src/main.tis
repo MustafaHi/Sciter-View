@@ -1,4 +1,4 @@
-//| Sciter View v0.6
+//| Sciter View v0.6.1
 //| https://github.com/MustafaHi/Sciter-View
 
 const HTML = $(#HTML), CSS = $(#CSS), SCRIPT = $(#SCRIPT),
@@ -124,7 +124,7 @@ class Editor : Element {
                 tabs = this.plaintext[S[0]-1].match(/^\t|\{$/g)?.length || 0;
             if (tabs)  this.execCommand("edit:insert-text", repeat("\t", tabs));
             
-            if        (this.plaintext[S[0]].slice(-1) == "}") {
+            if        (this.plaintext[S[0]][tabs] == "}") {
                        this.execCommand("edit:insert-text", "\r\n" + repeat("\t", tabs - 1));
                        this.plaintext.selectRange(0, 0, S[0], 999);
             }
@@ -135,7 +135,7 @@ class Editor : Element {
                 tabs = this.plaintext[S[0]].match(/^\t/g)?.length || 0;
                        this.execCommand("navigate:line-start");
                        this.execCommand("edit:insert-text", repeat("\t", tabs) + "\r\n");
-                       this.plaintext.selectRange(0, 0, S[0], 999);
+                       this.plaintext.selectRange(0, 0, S[0], tabs);
         }
         else if (at == "bottom") //| (ctrl+enter)
         {

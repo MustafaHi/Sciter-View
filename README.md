@@ -2,7 +2,7 @@
 
 test area (app) for [Sciter.JS](https://github.com/c-smile/sciter-js-sdk)/[TIS](https://github.com/c-smile/sciter-sdk) code
 
-> Version: 0.6
+> Version: 0.6.1
 
 ### HOW TO USE
 
@@ -19,9 +19,10 @@ test area (app) for [Sciter.JS](https://github.com/c-smile/sciter-js-sdk)/[TIS](
 | <kbd>SHIFT</kbd> <kbd>\{ \( \<</kbd> | Wrap selection |
 | <kbd>CTRL</kbd> <kbd>\[ \]</kbd> | Indent selection |
 | <kbd>CTRL[SHIFT]</kbd> <kbd>Enter</kbd> | Insert line below or [SHIFT]above |
+| <kbd>CTRL</kbd> <kbd>O/S</kbd> | Open/Save |
 | <kbd>F1</kbd> | Code |
 | <kbd>F2</kbd> | Inspector |
 | <kbd>F5</kbd> | Run/Reload |
 
-Inspector select, copy and delete with the usual victims.
+Inspector select, copy and delete with the usual keys.
 

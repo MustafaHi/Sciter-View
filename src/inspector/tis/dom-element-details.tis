@@ -272,5 +272,5 @@ class ElementDetails : Element
     }
     */
   }
-  event dblclick $(span, dd[style]) (e, it) { view.clipboard(#put, it.value); }
+  event dblclick $(span, dd) (e, it) { view.clipboard(#put, it.value); }
 }

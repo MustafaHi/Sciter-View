@@ -15,7 +15,7 @@
     aspect: colorize;
     display:block;
     color: #000;
-    line-height: 1.2em;
+    line-height: 1.4em;
     /* overflow:auto; scroll-indicator scroll-manner(wheel-animation:false, page-animation:false, step-animation:false, home-animation:false); */
   }
 
@@ -39,23 +39,23 @@
 
 
   text[type=script] {  background-color: #FFFAF0; }
-  text[type=markup] {  background-color: #FFF;  }
+  text[type=markup] {  background-color: #FFF; }
   text[type=style]  {  background-color: #FAFFF0; }  
 
   /*markup*/
-  text::mark(tag) { color: olive; } /*background-color: #f0f0fa;*/
-  text::mark(tag-id) { color: red; } /*background-color: #f0f0fa;*/
-  text::mark(tag-comment) { color:#ccc; }
+  text::mark(tag) { color: mediumblue; }
+  text::mark(tag-id) { color: brown; }
+  text::mark(tag-comment) { color: green; }
 
   /*source*/
-  text::mark(number) { color: brown; }
   text::mark(number-unit) { color: brown; }
-  text::mark(string) { color: teal; }
-  text::mark(keyword) { color: blue; }
-  text::mark(symbol) { color: brown; }
+  text::mark(number)  { color: brown; }
+  text::mark(string)  { color: teal; }
+  text::mark(keyword) { color: mediumblue; }
+  text::mark(symbol)  { color: brown; }
   text::mark(literal) { color: brown; }
   text::mark(comment) { color: green; }
-  text::mark(property) { color: mediumblue; } /*CSS*/
+  text::mark(property){ color: mediumblue; }
 
   :root > text:current { background-color:rgb(255,200,126); }
   :root > text:hover   { foreground-color:rgba(126,200,255,0.25); }
