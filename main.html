@@ -1,8 +1,9 @@
-﻿<html lang=en inspector=Code window-frame=standard>
+﻿<html lang=en inspector=Code window-frame=standard
+      window-width=1300 window-height=700 >
 
 <head>
     <meta charset="UTF-8">
-    <title>SciterView 0.6</title>
+    <title>SciterView 0.6.2</title>
     <style>
         @import url(src/colorizer/source-code.css);
         html[inspector="Inspector"] #HTML,
@@ -74,10 +75,11 @@ h1 {
         </frameset>
         <frameset rows="*">
 <plaintext #SCRIPT type="text/script">
-event click $(body) {
-	this.style#background
-	= String.$(rgb({rand(255)}, {rand(255)}, {rand(255)}));
-}
+var rand = (x) => { return Math.floor(Math.random() * x) };
+document.on("click", (evt, body) => {
+	body.style.background =
+        `rgb(${rand(255)},${rand(255)},${rand(255)})`;
+});
 </plaintext>
             <frame #VIEW></frame>
         </frameset>

@@ -1,4 +1,4 @@
-//| Sciter View v0.6.1
+//| Sciter View v0.6.2
 //| https://github.com/MustafaHi/Sciter-View
 
 const HTML = $(#HTML), CSS = $(#CSS), SCRIPT = $(#SCRIPT),
@@ -35,11 +35,12 @@ self.$(#RUN).on("click", Render);
 
 self.$(#LOAD).on("click", () => {
     var fn = view.selectFile(#open, "HTML File (*.htm,*.html)|*.html;*.htm|All Files (*.*)|*.*");
-    if (fn)  VIEW.frame.loadFile(fn);
+    if(!fn)  return;
 
-    HTML  .value = VIEW.frame.document[0].html.trim();
-    CSS   .value = VIEW.frame.document[1].html.trim();
-    SCRIPT.value = VIEW.frame.document[2].html.trim();
+    VIEW.frame.loadFile(fn);
+    HTML  .value = VIEW.frame.document.$(body)  ?.html?.trim();
+    CSS   .value = VIEW.frame.document.$(css)   ?.html?.trim();
+    SCRIPT.value = VIEW.frame.document.$(script)?.html?.trim();
 });
 self.$(#SAVE).on("click", () => {
     var fn = view.selectFile(#save, "HTML File (*.htm,*.html)|*.html;*.htm|All Files (*.*)|*.*");

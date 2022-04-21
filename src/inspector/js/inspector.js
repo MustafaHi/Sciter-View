@@ -29,7 +29,7 @@ Window.this.connectToInspector = function (ELEMENT) {
     // | [x] | set console output;
 
     CMD.on("keydown", (evt,el) => {
-      if( evt.code != "KeyRETURN" ) return;
+      if( evt.code != "Enter" && evt.code != "NumpadEnter" ) return;
       if( evt.shiftKey || evt.ctrlKey) return;
       let toeval = el.value.trim();
       if( !toeval ) return;
@@ -64,7 +64,7 @@ Window.this.connectToInspector = function (ELEMENT) {
 }
 
 LOG.onkeydown = function(evt) {
-    if (evt.code == "KeyDELETE")
+    if (evt.code == "Delete")
         for (var s of evt.target.$$(":checked")) s.remove();
 
     if (evt.code == "KeyC" && evt.ctrlKey)

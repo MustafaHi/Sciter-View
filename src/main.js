@@ -1,4 +1,4 @@
-//| Sciter View v0.6.1
+//| Sciter View v0.6.2
 //| https://github.com/MustafaHi/Sciter-View
 
 const HTML = document.$('#HTML'), CSS = document.$('#CSS'), SCRIPT = document.$('#SCRIPT'), 
@@ -38,11 +38,12 @@ document.$("#RUN").on("click", Render);
 
 document.$("#LOAD").on("click", () => {
     var fn = Window.this.selectFile({mode: "open", filter: "HTML File (*.htm,*.html)|*.html;*.htm|All Files (*.*)|*.*"});
-    if (fn)  VIEW.frame.loadFile(fn);
-
-    HTML  .value = VIEW.frame.document.children[0].innerHTML.trim();
-    CSS   .value = VIEW.frame.document.children[1].innerHTML.trim();
-    SCRIPT.value = VIEW.frame.document.children[2].innerHTML.trim();
+    if(!fn) return;
+    
+    VIEW.frame.loadFile(fn);
+    HTML  .value = VIEW.frame.document.$("body")  ?.innerHTML?.trim();
+    CSS   .value = VIEW.frame.document.$("style") ?.innerHTML?.trim();
+    SCRIPT.value = VIEW.frame.document.$("script")?.innerHTML?.trim();
 });
 document.$("#SAVE").on("click", () => {
     var fn = Window.this.selectFile ({
@@ -64,15 +65,15 @@ class Editor extends Element {
     onkeydown(evt) {
         if (evt.ctrlKey)
             switch(evt.keyCode) {
-                case 221: return this.Tab(true);  // ]
+                case  93: return this.Tab(true);  // ]
                     break;
-                case 219: return this.Tab(false); // [
+                case  91: return this.Tab(false); // [
                     break;
                                                   // ENTER
-                case  13: return this.newLine(evt.shiftKey ? "top" : "bottom"); 
+                case 257: return this.newLine(evt.shiftKey ? "top" : "bottom"); 
                     break;
             }
-        if (evt.keyCode == 13) this.post(() => this.newLine("keep"));
+        if (evt.keyCode == 257) this.post(() => this.newLine("keep"));
     }
 
     WrapKeys = [
@@ -125,7 +126,7 @@ class Editor extends Element {
         //| indent the new line accordingly
 
         if (at == "keep") //| (enter)
-        { 
+        {
             var S    = this.plaintext.selectionStart,
                 tabs = this.plaintext[S[0]-1].match(/\t|\{$/g)?.length || 0;
             if (tabs)  this.execCommand("edit:insert-text", repeat("\t", tabs));
