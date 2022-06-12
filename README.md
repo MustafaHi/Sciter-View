@@ -2,7 +2,7 @@
 
 Code Experimentation Lab (app) for [Sciter.JS](https://github.com/c-smile/sciter-js-sdk)/[TIS](https://github.com/c-smile/sciter-sdk) code
 
-> Version: 0.6.2
+> Version: 0.6.3
 
 ### HOW TO USE
 

@@ -1,4 +1,4 @@
-//| Sciter View v0.6.2
+//| Sciter View v0.6.3
 //| https://github.com/MustafaHi/Sciter-View
 
 const HTML = document.$('#HTML'), CSS = document.$('#CSS'), SCRIPT = document.$('#SCRIPT'), 
@@ -41,9 +41,9 @@ document.$("#LOAD").on("click", () => {
     if(!fn) return;
     
     VIEW.frame.loadFile(fn);
-    HTML  .value = VIEW.frame.document.$("body")  ?.innerHTML?.trim();
-    CSS   .value = VIEW.frame.document.$("style") ?.innerHTML?.trim();
-    SCRIPT.value = VIEW.frame.document.$("script")?.innerHTML?.trim();
+    HTML  .value = VIEW.frame.document.$("body")  ?.innerHTML?.trim(); HTML  .post(new Event("change"));
+    CSS   .value = VIEW.frame.document.$("style") ?.innerHTML?.trim(); CSS   .post(new Event("change"));
+    SCRIPT.value = VIEW.frame.document.$("script")?.innerHTML?.trim(); SCRIPT.post(new Event("change"));
 });
 document.$("#SAVE").on("click", () => {
     var fn = Window.this.selectFile ({
