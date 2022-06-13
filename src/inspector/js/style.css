@@ -1,0 +1,112 @@
+body {
+    flow: vertical;
+    margin: 0;
+}
+
+#CMD {
+    display: block;
+    width: *;
+    padding: 10dip 10dip 10dip 1.2em;
+    vertical-align: middle;
+    border-radius: none;
+
+    font-family: 'SF Mono', Consolas;
+    font-size: 14dip;
+    font-weight: 500;
+    font-rendering-mode: enhanced;
+    color: #222;
+
+    background-repeat: no-repeat;
+    background-image: url(path: M 0 0 L 3 3 L 0 6);
+    background-position: .5em 17dip;
+    background-size: 0.4em 0.6em;
+    stroke-width: 3dip;
+}
+
+@set LOG {
+    :root {
+        size: *;
+        border-bottom: 0;
+    }
+
+    option {
+        padding: 4dip;
+        border-left: 4dip solid;
+        border-bottom: 1dip solid #eee;
+    }
+
+    /*| info    |*/
+    option[severity="0"] {
+        border-left-color: #2295b3;
+    }
+
+    /*| warning |*/
+    option[severity="1"] {
+        border-left-color: #fd783e;
+    }
+
+    /*| error   |*/
+    option[severity="2"] {
+        border-left-color: #e83a3a;
+    }
+
+    var.coll {
+        display: inline-block;
+        border: 1px solid #ddd;
+    }
+
+    var.coll>caption {
+        behavior: clickable;
+        cursor: pointer;
+        padding-left: 1.2em;
+        padding-right: 0.6em;
+        background-image: url(path:M1152 896q0 26-19 45l-448 448q-19 19-45 19t-45-19-19-45v-896q0-26 19-45t45-19 45 19l448 448q19 19 19 45z);
+        background-size: 0.4em 0.6em;
+        background-repeat: no-repeat;
+        background-position: 0.6em 0.4em;
+        fill: #888;
+    }
+
+    var.coll[expanded]>caption {
+        background-image: url(path:M1408 704q0 26-19 45l-448 448q-19 19-45 19t-45-19l-448-448q-19-19-19-45t19-45 45-19h896q26 0 45 19t19 45z);
+        background-size: 0.6em 0.4em;
+        background-position: 0.4em 0.6em;
+    }
+
+    var.coll>.details {
+        flow: row(span, var);
+        padding: 3px;
+        width: max-content;
+    }
+
+    var.coll[expanded]>.details>span {
+        /* item caption */
+        display: block;
+        text-align: right;
+        width: max-content;
+        color: #C71585;
+    }
+
+    var.string {
+        display: block;
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        width: max-content;
+        max-width: 20em;
+        line-height: 1.2em;
+    }
+
+    var.string::before {
+        content: '"';
+    }
+
+    var.string::after {
+        content: '"';
+    }
+
+    var.null,
+    var.undefined {
+        color: brown;
+    }
+}

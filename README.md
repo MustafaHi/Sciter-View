@@ -2,7 +2,7 @@
 
 Code Experimentation Lab (app) for [Sciter.JS](https://github.com/c-smile/sciter-js-sdk)/[TIS](https://github.com/c-smile/sciter-sdk) code
 
-> Version: 0.6.3
+> Version: 0.7.0
 
 ### HOW TO USE
 
@@ -10,7 +10,7 @@ Code Experimentation Lab (app) for [Sciter.JS](https://github.com/c-smile/sciter
 - Init `install.sh` or add `scapp` from Sciter-sdk
 - Run it ✌
 
-![Sciter View screenshot](https://user-images.githubusercontent.com/5108884/120910403-66a66e80-c687-11eb-9046-311ade74e0a4.png)
+![Sciter View screenshot](https://user-images.githubusercontent.com/5108884/173364631-da79a105-36bf-4e2a-bfc4-80e7949ec514.png)
 
 ### Shortcuts
 

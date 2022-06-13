@@ -29,17 +29,17 @@ Window.this.connectToInspector = function (ELEMENT) {
     // | [x] | set console output;
 
     CMD.on("keydown", (evt,el) => {
-      if( evt.code != "Enter" && evt.code != "NumpadEnter" ) return;
-      if( evt.shiftKey || evt.ctrlKey) return;
-      let toeval = el.value.trim();
-      if( !toeval ) return;
-      try {
-        var r = ELEMENT.frame.document.globalThis.eval(toeval);
-        r == null ? console.warn('null') : console.log(r);
-      } catch(e) {
-        console.warn(e.message);
-      }
-      return true;
+        if( evt.code != "Enter" && evt.code != "NumpadEnter" ) return;
+        if( evt.shiftKey || evt.ctrlKey) return;
+        let toeval = el.value.trim();
+        if( !toeval ) return;
+        try {
+            var r = ELEMENT.frame.document.globalThis.eval(toeval);
+            r == null ? console.warn('null') : console.log(RenderValue(r));
+        } catch(e) {
+            console.warn(e.message);
+        }
+        return true;
     });
 
     // | [ ] | get Style;
@@ -73,3 +73,39 @@ LOG.onkeydown = function(evt) {
     if (evt.code == "KeyA" && evt.ctrlKey)
         for (var s of evt.target.children) s.state.checked = true;
 }
+
+
+function RenderValue(val, depth=0)
+{
+    if (depth > 2) return;
+        depth++;
+    if (typeof val == "object")
+    {
+        if (typeof val.length == "number")
+        {
+            let n = 0;
+            const list = [];
+            for (const v of val)
+            {
+                const key = (n++).toString();
+                list.push(<span>{key}:</span>);
+                list.push(RenderValue(v, depth));
+            }
+            return <var class="coll" expanded><caption>Array({val.length})</caption><div class="details">{list}</div></var>;
+        } else 
+        {
+            let n = 0;
+            const list = [];
+            for (const [key, v] of Object.entries(val)) {
+                list.push(<span>{key}:</span>);
+                list.push(RenderValue(v, depth));
+            }
+            return <var class="coll" expanded><caption>{val}</caption><div class="details">{list}</div></var>;
+        }
+    }
+    else if (typeof val == "string")
+        return <var class="string">{val}</var>;
+    else
+        return <var class="number">{val}</var>;
+}
+

@@ -1,42 +1,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <style>
-    body { flow: vertical; margin: 0; }
-    #CMD { 
-      display:block;
-      width:*;
-      padding: 10dip 10dip 10dip 1.2em;
-      vertical-align: middle;
-      border-radius: none;
-
-      font-family: 'SF Mono', Consolas;
-      font-size: 14dip;
-      font-weight: 500;
-      font-rendering-mode: enhanced;
-      color: #222;
-
-      background-repeat:no-repeat;
-      background-image:url(path: M 0 0 L 3 3 L 0 6);
-      background-position: .5em 17dip;
-      background-size: 0.4em 0.6em;
-      stroke-width:3dip;
-    }
-    @set LOG {
-      :root {
-        size: *;
-        border-bottom: 0;
-      }
-      option { 
-        padding: 4dip;
-        border-left  : 4dip solid;
-        border-bottom: 1dip solid #eee;
-      }
-      /*| info    |*/ option[severity="0"] { border-left-color: #2295b3; }
-      /*| warning |*/ option[severity="1"] { border-left-color: #fd783e; }
-      /*| error   |*/ option[severity="2"] { border-left-color: #e83a3a; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
   <script src="inspector.js" type=module></script>
 </head>
 <body>
