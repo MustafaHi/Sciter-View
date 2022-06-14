@@ -1,4 +1,4 @@
-//| Sciter View v0.6.3
+//| Sciter View v0.7.1
 //| https://github.com/MustafaHi/Sciter-View
 
 const HTML = document.$('#HTML'), CSS = document.$('#CSS'), SCRIPT = document.$('#SCRIPT'), 
@@ -125,32 +125,35 @@ class Editor extends Element {
         //| check if current line has tabs and/or end with {
         //| indent the new line accordingly
 
-        if (at == "keep") //| (enter)
-        {
-            var S    = this.plaintext.selectionStart,
-                tabs = this.plaintext[S[0]-1].match(/\t|\{$/g)?.length || 0;
-            if (tabs)  this.execCommand("edit:insert-text", repeat("\t", tabs));
+        this.plaintext.update((ctx) => {
+            if (at == 'keep')
+            {
+                var S    = this.plaintext.selectionStart,
+                    tabs = this.plaintext[S[0] - 1].match(/\t|\{$/g)?.length || 0;
+                if (tabs) ctx.execCommand("edit:insert-text", repeat("\t", tabs));
 
-            if        (this.plaintext[S[0]][tabs] == "}") {
-                       this.execCommand("edit:insert-text", "\r\n" + repeat("\t", tabs - 1));
-                       this.plaintext.selectRange(0, 0, S[0], 999);
+                if (this.plaintext[S[0]][tabs] == "}") {
+                    ctx.execCommand("edit:insert-text", "\r\n" + repeat("\t", tabs - 1));
+                }
+                this.plaintext.selectRange(0, 0, S[0], 999);
             }
-        }
-        else if (at == "top") //| (ctrl+shift+enter)
-        { 
-            var S    = this.plaintext.selectionStart,
-                tabs = this.plaintext[S[0]].match(/\t/g)?.length || 0;
-                       this.execCommand("navigate:line-start");
-                       this.execCommand("edit:insert-text", repeat("\t", tabs) + "\r\n");
-                       this.plaintext.selectRange(0, 0, S[0], tabs);
-        } 
-        else if (at == "bottom") //| (ctrl+enter)
-        { 
-            var S    = this.plaintext.selectionStart,
-                tabs = this.plaintext[S[0]].match(/\t|\{$/g)?.length || 0;
-                       this.execCommand("navigate:line-end");
-                       this.execCommand("edit:insert-text", "\r\n" + repeat("\t", tabs));
-        }
+            else if (at == "top") //| (ctrl+shift+enter)
+            {
+                var S    = this.plaintext.selectionStart,
+                    tabs = this.plaintext[S[0]].match(/\t/g)?.length || 0;
+                ctx.execCommand("navigate:line-start");
+                ctx.execCommand("edit:insert-text", repeat("\t", tabs) + "\r\n");
+                this.plaintext.selectRange(0, 0, S[0], tabs);
+            }
+            else if (at == "bottom") //| (ctrl+enter)
+            {
+                var S    = this.plaintext.selectionStart,
+                    tabs = this.plaintext[S[0]].match(/\t|\{$/g)?.length || 0;
+                ctx.execCommand("navigate:line-end");
+                ctx.execCommand("edit:insert-text", "\r\n" + repeat("\t", tabs));
+            }
+            return true;
+        });
         return true;
     }
 }
